@@ -60,7 +60,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('intro'))
 
 
 def save_picture(form_picture):
