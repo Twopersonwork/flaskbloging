@@ -9,8 +9,8 @@ from flask_socketio import SocketIO,emit
 app = Flask(__name__)
 app.config['SECRET_KEY'] =os.urandom(16)
 socketio = SocketIO(app)
-#app.config['SQLALCHEMY_DATABASE_URI']='postgres://rmckyjrelemmlh:3138e8523cd6c897ea38f12ee5617afb4b2174234a602cc8c343062ecd0ff57a@ec2-52-7-39-178.compute-1.amazonaws.com:5432/d7gocrfuhfvthk'
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI']='postgres://rmckyjrelemmlh:3138e8523cd6c897ea38f12ee5617afb4b2174234a602cc8c343062ecd0ff57a@ec2-52-7-39-178.compute-1.amazonaws.com:5432/d7gocrfuhfvthk'
+#app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
