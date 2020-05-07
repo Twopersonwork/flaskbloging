@@ -21,6 +21,8 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-nav .nav-link {
   color: #ffffff;
   font-size:large;
+  /*margin-top: 20px;*/
+  
   
 }
 
@@ -34,6 +36,10 @@ hr.allhr {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
+  
+}
+#navbarToggal{
+  padding-bottom: 10px;
 }
 
 .content-section {
@@ -43,6 +49,7 @@ hr.allhr {
   border-radius: 5px;
   margin-bottom: 20px;
   box-shadow: 3px 5px 5px 5px #63552b;
+  margin-top: 40px;
 }
 
 .article-title {
