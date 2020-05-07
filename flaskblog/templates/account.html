@@ -2,11 +2,19 @@
 {% block content %}
     <div class="content-section">
       <div class="media">
-        <img class="rounded-circle account-img" src="{{ image_file }}">
+        
+        <div class="col-md-12 text-center ">
+            <div class="panel panel-default">
+                
+              <div class="userprofile social ">
+                <div class="userpic"> 
+                    <div class="image_inner_container">       
+        <img class="rounded-circle account-img" style="text-align: center;" src="{{ image_file }}">
+                    </div>
         <div class="media-body">
           <h2 class="account-heading">{{ current_user.username }}</h2>
           <p class="text-secondary">{{ current_user.email }}</p>
-        </div>
+        </div></div></div></div></div>
       </div>
         <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}

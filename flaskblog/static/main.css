@@ -2,7 +2,7 @@ body {
   background: white;
   color: #333333;
   margin-top: 5rem;
-  background: url("images/pencils.jpg") no-repeat center center fixed;
+  background: url("images/yellow.jpeg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -20,10 +20,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .site-header .navbar-nav .nav-link {
   color: #ffffff;
-  font-size:large;
+  font-size: large;
   /*margin-top: 20px;*/
-  
-  
 }
 
 hr.allhr {
@@ -36,9 +34,9 @@ hr.allhr {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
-  
 }
-#navbarToggal{
+
+#navbarToggal {
   padding-bottom: 10px;
 }
 
@@ -88,12 +86,27 @@ a.article-title:hover {
   vertical-align: middle;
 }
 
-.account-img {
+.image_inner_container {
+  height: 135px;
+  width: 135px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  padding: 5px; 
+  background: #833ab4;
+  background: -webkit-linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+  background: linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+}
+
+.image_inner_container img{
   height: 125px;
   width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
+  border-radius: 50%;
+  border: 5px solid white;
 }
+
+
 
 .account-heading {
   font-size: 2.5rem;
