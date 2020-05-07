@@ -18,7 +18,7 @@ def home():
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('home.html', posts=posts)
 
-@app.route("/")
+@app.route("/",methods=['GET'])
 def intro():
     return render_template('intro.html', title='Home')
 
@@ -116,7 +116,7 @@ def new_post():
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post,votes=votes)
+    return render_template('post.html', title=post.title, post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
