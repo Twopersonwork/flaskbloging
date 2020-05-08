@@ -14,7 +14,7 @@
     <hr class="allhr">
 
     {% if current_user.has_liked_post(post) %}
-    <a href="{{ url_for('like_action', post_id=post.id, action='like1') }}" style="color: black;"><i class="fa fa-thumbs-up fa-2x"></i></a><span
+    <a href="{{ url_for('like_action', post_id=post.id, action='like1') }}" style="color: blue;"><i class="fa fa-thumbs-up fa-2x"></i></a><span
       class="pl-2 pr-4">{{post.likes.count()}}</span>
     {% else %}
     <a href="{{ url_for('like_action', post_id=post.id, action='like') }}"style="color: black;"><i class="fa fa-thumbs-up fa-2x"></i></a><span
@@ -22,7 +22,7 @@
     {% endif %}
 
     {% if current_user.has_unliked_post(post) %}
-    <a href="{{ url_for('like_action', post_id=post.id, action='unlike1') }}" style="color: black;"><i class="fa fa-thumbs-down fa-2x"></i></a><span
+    <a href="{{ url_for('like_action', post_id=post.id, action='unlike1') }}" style="color: red;"><i class="fa fa-thumbs-down fa-2x"></i></a><span
         class="pl-2">{{post.unlikes.count()}}</span>
     {% else %}
     <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}" style="color: black;"><i class="fa fa-thumbs-down fa-2x"></i></a><span
