@@ -4,8 +4,8 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
-                             PostForm, RequestResetForm, ResetPasswordForm)
-from flaskblog.models import User, Post
+                             PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm)
+from flaskblog.models import User, Post,PostComment
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
@@ -111,12 +111,28 @@ def new_post():
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post',
                            form=form, legend='New Post')
-
-
-@app.route("/post/<int:post_id>")
+            
+@app.route("/post/<int:post_id>",methods=['GET','POST'])
+@login_required
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    form = PostCommentForm()
+    return render_template('post.html', title=post.title, post=post,form=form)
+
+@app.route("/post/<int:post_id>/comment", methods=['GET', 'POST'])
+@login_required
+def post_comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = PostCommentForm()
+    if form.validate_on_submit():
+        comment = PostComment(user_id=current_user.id,user_name=current_user.username,post_id=post.id,content=form.content.data,image_file = current_user.image_file)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been posted!', 'success')
+        return redirect(url_for('post_comment',post_id=post_id))
+    return render_template('post.html',
+                           form=form,post=post)
+
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -159,6 +175,12 @@ def like_action(post_id, action):
         db.session.commit()
     if action == 'unlike':
         current_user.unlike_post(post)
+        db.session.commit()
+    if action == 'like1':
+        current_user.like1_post(post)
+        db.session.commit()
+    if action == 'unlike1':
+        current_user.unlike1_post(post)
         db.session.commit()
     return redirect(request.referrer)
 

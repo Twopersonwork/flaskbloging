@@ -18,8 +18,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     liked = db.relationship('PostLike',foreign_keys='PostLike.user_id', backref='user', lazy='dynamic')
     unliked = db.relationship('PostUnLike',foreign_keys='PostUnLike.user_id', backref='user', lazy='dynamic')
-    def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"    
+    commented = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='user',lazy='dynamic')
+     
 
     def like_post(self, post):
         if not self.has_liked_post(post):
@@ -31,10 +31,25 @@ class User(db.Model, UserMixin):
             PostLike.user_id == self.id,
             PostLike.post_id == post.id).count() > 0
 
+
+    def like1_post(self, post):
+        if self.has_liked_post(post):
+            PostLike.query.filter_by(
+                user_id=self.id,
+                post_id=post.id).delete()
+
+
     def unlike_post(self, post):
         if not self.has_unliked_post(post):
             unlike = PostUnLike(user_id=self.id,post_id=post.id)
             db.session.add(unlike)
+
+    def unlike1_post(self, post):
+        if self.has_liked_post(post):
+            PostUnLike.query.filter_by(
+                user_id=self.id,
+                post_id=post.id).delete()
+
 
     def has_unliked_post(self, post):
         return PostUnLike.query.filter(
@@ -69,7 +84,10 @@ class Post(db.Model,UserMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     likes = db.relationship('PostLike', backref='post', lazy='dynamic')
     unlikes = db.relationship('PostUnLike', backref='post', lazy='dynamic')
+    comments = db.relationship('PostComment',backref='post',lazy='dynamic')
 
+    def __repr__(self):
+        return f"Post('{self.title}','{self.date_posted}','{self.comments}')"  
 
 class PostLike(db.Model):
     __tablename__ = 'post_like'
@@ -88,3 +106,16 @@ class PostUnLike(db.Model):
 
     def __repr__(self):
         return f"Unlike('{self.user_id}','{self.post_id}')"    
+
+class PostComment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_name = db.Column(db.String(20), db.ForeignKey('user.username'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+
+    
+    def __repr__(self):
+        return f"Comment('{self.user_id}','{self.post_id}','{self.date_posted}','{self.content}')"    

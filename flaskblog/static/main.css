@@ -93,21 +93,42 @@ a.article-title:hover {
   margin-right: auto;
   margin-bottom: 10px;
   border-radius: 50%;
-  padding: 5px; 
+  padding: 5px;
   background: #833ab4;
   background: -webkit-linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
   background: linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
 }
 
-.image_inner_container img{
+.image_inner_container img {
   height: 125px;
   width: 125px;
   border-radius: 50%;
   border: 5px solid white;
 }
 
-
-
 .account-heading {
   font-size: 2.5rem;
+}
+
+[type="file"] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.btn-grad {
+  background-image: linear-gradient(to right, #E44D26 0%, #F16529 51%, #E44D26 100%);
+  color: #ffffff;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  color: #ffffff;
 }

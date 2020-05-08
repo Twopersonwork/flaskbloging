@@ -8,19 +8,30 @@
     <div class="article-metadata">
       <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
       <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
-    </div>  
+    </div>
     <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
     <p class="article-content">{{ post.content }}</p>
     <hr class="allhr">
 
     {% if current_user.has_liked_post(post) %}
-    <a class="btn btn-danger" href="{{ url_for('like_action', post_id=post.id, action='unlike') }}">Unlike<span class="pl-2">{{post.unlikes.count()}}</span></a>
-   <a class="btn btn-success" href="{{ url_for('like_action', post_id=post.id, action='like') }}">Like<span class="pl-2">{{post.likes.count()}}</span></a>
+    <a href="{{ url_for('like_action', post_id=post.id, action='like1') }}" style="color: black;"><i class="fa fa-thumbs-up fa-2x"></i></a><span
+      class="pl-2 pr-4">{{post.likes.count()}}</span>
     {% else %}
-    <a class="btn btn-danger" href="{{ url_for('like_action', post_id=post.id, action='unlike') }}">Unlike<span class="pl-2">{{post.unlikes.count()}}</span></a>
-    <a class="btn btn-success" href="{{ url_for('like_action', post_id=post.id, action='like') }}">Like<span class="pl-2">{{post.likes.count()}}</span></a>
+    <a href="{{ url_for('like_action', post_id=post.id, action='like') }}"style="color: black;"><i class="fa fa-thumbs-up fa-2x"></i></a><span
+        class="pl-2 pr-4">{{post.likes.count()}}</span>
     {% endif %}
-      
+
+    {% if current_user.has_unliked_post(post) %}
+    <a href="{{ url_for('like_action', post_id=post.id, action='unlike1') }}" style="color: black;"><i class="fa fa-thumbs-down fa-2x"></i></a><span
+        class="pl-2">{{post.unlikes.count()}}</span>
+    {% else %}
+    <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}" style="color: black;"><i class="fa fa-thumbs-down fa-2x"></i></a><span
+        class="pl-2">{{post.unlikes.count()}}</span>
+    {% endif %}
+
+    <a class="btn btn-info" style="float: right;" href="{{ url_for('post_comment', post_id=post.id) }}"><i
+        class="fa fa-comment pr-2"></i>Comment</a>
+
 
 
   </div>
