@@ -125,13 +125,27 @@ def post_comment(post_id):
     post = Post.query.get_or_404(post_id)
     form = PostCommentForm()
     if form.validate_on_submit():
-        comment = PostComment(user_id=current_user.id,user_name=current_user.username,post_id=post.id,content=form.content.data,image_file = current_user.image_file)
+        comment = PostComment(user_id=current_user.id,user_name=current_user.username,post_id=post.id,content=form.content.data,image_file = current_user.image_file) 
         db.session.add(comment)
         db.session.commit()
         flash('Your comment has been posted!', 'success')
         return redirect(url_for('post_comment',post_id=post_id))
-    return render_template('post.html',
+    return render_template('comment.html',
                            form=form,post=post)
+
+                           
+
+
+@app.route("/post/<int:post_id>/comment/<int:id>/cdelete", methods=['POST','GET'])
+@login_required
+def delete_comment(id,post_id):
+    post = Post.query.get_or_404(post_id)
+    comment = PostComment.query.get(id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Your comment has been deleted!', 'success')
+    return redirect(url_for('post_comment',post_id=post_id))
+    return render_template('comment.html',post=post,comment=comment)
 
 
 
