@@ -28,11 +28,11 @@
     <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}" style="color: black;"><i
         class="fa fa-thumbs-down fa-2x"></i></a><span class="pl-2">{{post.unlikes.count()}}</span>
     {% endif %}
+    <span class="pl-2 pt-2" style="float: right;">{{post.comments.count()}}</span>
 
     <a style="float: right;" href="{{ url_for('post_comment', post_id=post.id) }}"><i title="Comments"
         class="fa fa-comments fa-2x" onmouseover="this.style.color='#1d809f'" onmouseout="this.style.color='black'"
         style="color: black;"></i></a>
-
 
 
   </div>

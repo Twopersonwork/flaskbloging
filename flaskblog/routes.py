@@ -78,9 +78,9 @@ def save_picture(form_picture):
     return picture_fn
 
 
-@app.route("/account", methods=['GET', 'POST'])
+@app.route("/account/edit", methods=['GET', 'POST'])
 @login_required
-def account():
+def account_edit():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -95,8 +95,14 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account',
+    return render_template('edit_acc.html', title='Account',
                            image_file=image_file, form=form)
+
+@app.route("/account", methods=['GET', 'POST'])
+@login_required
+def account():
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('account.html',image_file=image_file)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -125,7 +131,7 @@ def post_comment(post_id):
     post = Post.query.get_or_404(post_id)
     form = PostCommentForm()
     if form.validate_on_submit():
-        comment = PostComment(user_id=current_user.id,user_name=current_user.username,post_id=post.id,content=form.content.data,image_file = current_user.image_file) 
+        comment = PostComment(user_id=current_user.id,user_name=current_user.username,post_id=post.id,content=form.content.data) 
         db.session.add(comment)
         db.session.commit()
         flash('Your comment has been posted!', 'success')

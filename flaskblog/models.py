@@ -19,8 +19,7 @@ class User(db.Model, UserMixin):
     liked = db.relationship('PostLike',foreign_keys='PostLike.user_id', backref='user', lazy='dynamic')
     unliked = db.relationship('PostUnLike',foreign_keys='PostUnLike.user_id', backref='user', lazy='dynamic')
     commented = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='user',lazy='dynamic')
-     
-
+    image = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='img',lazy=True)
     def like_post(self, post):
         if not self.has_liked_post(post):
             like = PostLike(user_id=self.id, post_id=post.id)
@@ -114,8 +113,7 @@ class PostComment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-
+    
     
     def __repr__(self):
         return f"Comment('{self.user_id}','{self.post_id}','{self.date_posted}','{self.content}')"    

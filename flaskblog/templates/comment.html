@@ -53,10 +53,13 @@
     <div class="media-body">
 
         <div class="article-metadata">
-            <img src="{{ url_for('static', filename='profile_pics/' + comment.image_file) }}" alt="Avatar"
+            
+            
+
+            <img src="{{ url_for('static', filename='profile_pics/' + comment.img.image_file) }}"alt="Avatar"
                 class="avatar mr-2 mb-1 mt-2">
 
-            <!-- <a class="btn btn-info" style="float: right;"><i class="fa fa-trash-alt">Delete</i></a> -->
+          
 
 
             <a class="mr-2 mb-20"
