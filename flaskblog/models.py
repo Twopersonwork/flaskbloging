@@ -45,7 +45,7 @@ class User(db.Model, UserMixin):
             db.session.add(unlike)
 
     def unlike1_post(self, post):
-        if self.has_liked_post(post):
+        if self.has_unliked_post(post):
             PostUnLike.query.filter_by(
                 user_id=self.id,
                 post_id=post.id).delete()
