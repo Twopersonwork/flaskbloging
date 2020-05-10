@@ -20,6 +20,10 @@ class User(db.Model, UserMixin):
     unliked = db.relationship('PostUnLike',foreign_keys='PostUnLike.user_id', backref='user', lazy='dynamic')
     commented = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='user',lazy='dynamic')
     image = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='img',lazy=True)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+
+
+
     def like_post(self, post):
         if not self.has_liked_post(post):
             like = PostLike(user_id=self.id, post_id=post.id)
@@ -72,7 +76,7 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}','{self.confirmed}')"
 
 
 class Post(db.Model,UserMixin):
