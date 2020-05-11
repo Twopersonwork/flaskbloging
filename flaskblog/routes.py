@@ -46,7 +46,7 @@ def register():
         flash('A confirmation email has been sent via email.', 'success')
 
         
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 
@@ -69,7 +69,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    else:
+    elif request.method == 'POST':
         flash('Please verify your email.','danger')
     return render_template('login.html', title='Login', form=form)
 
@@ -287,7 +287,7 @@ def confirm_email(token):
         db.session.add(user)
         db.session.commit()
         flash('You have confirmed your account. Thanks!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 def send_email(to, subject, template):
     msg = Message(
