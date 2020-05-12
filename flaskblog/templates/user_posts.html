@@ -27,28 +27,29 @@
                     <div class="row">
                         <div class="col-4 main-box-layout">
 
+                            <div class="box-layout-text">
+                                <h5>Following</h5>
+                                <span>{{user.followed.count()}}</span>
+                            </div>
+                        </div>
+                        <div class="col-4 main-box-layout">
+
                             <div class="box-layout-text ">
                                 <h5>Posts</h5>
                                 <span> {{ posts.total }}</span>
                             </div>
                         </div>
-                        
+
+
                         <div class="col-4 main-box-layout">
 
                             <div class="box-layout-text">
-                                    <h5>Following</h5>
-                                    <span>{{user.followed.count()}}</span>
-                            </div>
-                        </div>
-                        <div class="col-4 main-box-layout">
+                                <h5>Followers</h5>
 
-                            <div class="box-layout-text">
-                                    <h5>Followers</h5>
-                                
                                 <span> {{user.followers.count()}}</span>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
                 <!-- jrbvkjsvjnjkfnvgj -->
@@ -58,9 +59,9 @@
             <div>
 
 
-                
 
-            {% if current_user.username!= user.username %}
+
+                {% if current_user.username!= user.username %}
                 {% if not current_user.is_following(user) %}
                 <a href="{{ url_for('follow', username=user.username) }}" class="btn btn-primary">Follow</a>
                 {% else %}
