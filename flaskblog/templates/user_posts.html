@@ -7,15 +7,13 @@
             <div class="panel panel-default">
                 <!-- <div class="userpic"> -->
                 <div class="image_inner_container">
-                    <img class="rounded-circle account-img" style="text-align: center;" src="{{ image_file }}">
+                    <img class="rounded-circle account-img" style="text-align: center;" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
                 </div>
                 <div class="media-body">
-                    {% if current_user.username==user.username %}
-                    <h2 class="account-heading">{{ current_user.username }}</h2>
-                    {% else %}
+                    
 
                     <h2 class="account-heading">{{ post.author.username }}</h2>
-                    {% endif %}
+                
                     <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
                 </div>
                 <hr>
@@ -29,27 +27,24 @@
 
                             <div class="box-layout-text">
                                 <h5>Following</h5>
-                                <span>{{user.followed.count()}}</span>
+                                <span style="text-align: center;">{{user.followed.count()}}</span>
+                            </div>
+                        </div>
+                        <div class="col-4 main-box-layout">
+
+                            <div class="box-layout-text">
+                                <h5>Followers</h5>
+
+                                <span style="text-align: center;"> {{user.followers.count()}}</span>
                             </div>
                         </div>
                         <div class="col-4 main-box-layout">
 
                             <div class="box-layout-text ">
                                 <h5>Posts</h5>
-                                <span> {{ posts.total }}</span>
+                                <span style="text-align: center;"> {{ posts.total }}</span>
                             </div>
                         </div>
-
-
-                        <div class="col-4 main-box-layout">
-
-                            <div class="box-layout-text">
-                                <h5>Followers</h5>
-
-                                <span> {{user.followers.count()}}</span>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 <!-- jrbvkjsvjnjkfnvgj -->

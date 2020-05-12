@@ -10,7 +10,7 @@
                 </div>
                 <div class="media-body">
                     <h2 class="account-heading">{{ current_user.username }}</h2>
-                    
+
                     <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
                 </div>
                 <hr>
@@ -22,24 +22,24 @@
                     <div class="row">
                         <div class="col-4 main-box-layout">
 
-                            <div class="box-layout-text ">
-                                <h5>Posts</h5>
-                                <span> {{ posts.count() }}</span>
-                            </div>
-                        </div>
-                        <div class="col-4 main-box-layout">
-
                             <div class="box-layout-text">
                                 <h5>Following</h5>
-
-                                <span>{{user.followed.count()}}</span>
+                                <span style="text-align: center;">{{user.followed.count()}}</span>
                             </div>
                         </div>
                         <div class="col-4 main-box-layout">
 
                             <div class="box-layout-text">
-                                 <h5>Followers</h5>
-                                <span> {{user.followers.count()}}</span>
+                                <h5>Followers</h5>
+
+                                <span style="text-align: center;"> {{user.followers.count()}}</span>
+                            </div>
+                        </div>
+                        <div class="col-4 main-box-layout">
+
+                            <div class="box-layout-text ">
+                                <h5>Posts</h5>
+                                <span style="text-align: center;"> {{ posts.total }}</span>
                             </div>
                         </div>
                     </div>
@@ -51,12 +51,13 @@
             <div>
 
 
-                
-                <a class="btn btn-info" style="margin-top:20px;" href="{{url_for('account_edit')}}">Edit your profile</a>
+
+                <a class="btn btn-info" style="margin-top:20px;" href="{{url_for('account_edit')}}">Edit your
+                    profile</a>
 
 
-                
-                
+
+
 
             </div>
         </div>
@@ -65,5 +66,3 @@
 </div>
 
 {% endblock content %}
-
-

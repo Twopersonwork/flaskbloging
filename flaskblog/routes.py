@@ -241,7 +241,6 @@ def like_action(post_id, action):
 
 @app.route("/user/<string:username>")
 def user_posts(username):
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user)\
@@ -249,7 +248,7 @@ def user_posts(username):
         .paginate(page=page, per_page=5)
     post = Post.query.filter_by(user_id=user.id).first()
     
-    return render_template('user_posts.html', posts=posts, user=user,image_file=image_file,post=post)
+    return render_template('user_posts.html', posts=posts, user=user,post=post)
 
 
 def send_reset_email(user):
