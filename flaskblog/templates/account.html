@@ -2,28 +2,68 @@
 {% block content %}
 <div class="content-section">
     <div class="media">
-
-
         <div class="col-md-12 text-center ">
             <div class="panel panel-default">
+                <!-- <div class="userpic"> -->
+                <div class="image_inner_container">
+                    <img class="rounded-circle account-img" style="text-align: center;" src="{{ image_file }}">
+                </div>
+                <div class="media-body">
+                    <h2 class="account-heading">{{ current_user.username }}</h2>
+                    
+                    <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
+                </div>
+                <hr>
 
-                <div class="userprofile social ">
-                    <div class="userpic">
-                        <div class="image_inner_container">
-                            <img class="rounded-circle account-img" style="text-align: center;" src="{{ image_file }}">
-                        </div>
-                        <div class="media-body">
-                            <h2 class="account-heading">{{ current_user.username }}</h2>
-                            <p class="text-secondary">{{ current_user.email }}</p>
-                        </div>
 
+
+                <!-- Followers following Posts -->
+                <div class="container main-section">
+                    <div class="row">
+                        <div class="col-4 main-box-layout">
+
+                            <div class="box-layout-text ">
+                                <h5>Posts</h5>
+                                <span> {{ posts.count() }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4 main-box-layout">
+
+                            <div class="box-layout-text">
+                                <h5>Following</h5>
+
+                                <span>{{user.followed.count()}}</span>
+                            </div>
+                        </div>
+                        <div class="col-4 main-box-layout">
+
+                            <div class="box-layout-text">
+                                 <h5>Followers</h5>
+                                <span> {{user.followers.count()}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <a class="btn btn-info" href="{{url_for('account_edit')}}">Edit Profile</a>
+                <!-- jrbvkjsvjnjkfnvgj -->
+
+            </div>
+
+            <div>
+
+
+                
+                <a class="btn btn-info" style="margin-top:20px;" href="{{url_for('account_edit')}}">Edit your profile</a>
+
+
+                
+                
+
             </div>
         </div>
 
     </div>
-   
 </div>
+
 {% endblock content %}
+
+

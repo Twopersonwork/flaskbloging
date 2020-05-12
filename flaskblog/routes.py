@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                              PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm)
-from flaskblog.models import User, Post,PostComment
+from flaskblog.models import User, Post,PostComment,Follow
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from flaskblog.token import generate_confirmation_token, confirm_token
@@ -103,10 +103,20 @@ def account_edit():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username = form.username.data
-        current_user.email = form.email.data
         db.session.commit()
+        if current_user.email != form.email.data:
+            current_user.email = form.email.data
+            current_user.confirmed=False
+            db.session.commit()
+            token = generate_confirmation_token(form.email.data)
+            confirm_url = url_for('confirm_email1', token=token, _external=True)
+            html = render_template('user/updated.html', confirm_url=confirm_url)
+            subject = "Please confirm your email"
+            send_email(form.email.data, subject, html)
+            flash('A confirmation email has been sent via email.', 'success')
+            return redirect(url_for('login'))
         flash('Your account has been updated!', 'success')
-        return redirect(url_for('account'))
+        
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
@@ -114,11 +124,14 @@ def account_edit():
     return render_template('edit_acc.html', title='Account',
                            image_file=image_file, form=form)
 
-@app.route("/account", methods=['GET', 'POST'])
+@app.route("/account/<string:username>", methods=['GET', 'POST'])
 @login_required
-def account():
+def account(username):
+    user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html',image_file=image_file)
+    posts = Post.query.filter_by(author=user)
+        
+    return render_template('account.html',image_file=image_file,user=user,posts=posts)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -174,6 +187,7 @@ def delete_comment(id,post_id):
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
+    
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
         abort(403)
@@ -221,14 +235,21 @@ def like_action(post_id, action):
     return redirect(request.referrer)
 
 
+
+
+
+
 @app.route("/user/<string:username>")
 def user_posts(username):
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    post = Post.query.filter_by(user_id=user.id).first()
+    
+    return render_template('user_posts.html', posts=posts, user=user,image_file=image_file,post=post)
 
 
 def send_reset_email(user):
@@ -289,6 +310,23 @@ def confirm_email(token):
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('login'))
 
+
+
+@app.route('/confirm1/<token>')
+def confirm_email1(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('login'))
+
 def send_email(to, subject, template):
     msg = Message(
         subject,
@@ -297,3 +335,36 @@ def send_email(to, subject, template):
         sender=app.config['MAIL_USERNAME']
     )
     mail.send(msg)
+
+
+
+@app.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found.'.format(username),'success')
+        return redirect(url_for('user_posts'))
+    if user == current_user:
+        flash('You cannot follow yourself!')
+        return redirect(url_for('user_posts',username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash('You are following {}!'.format(username),'success')
+    return redirect(url_for('user_posts',username=username))
+
+@app.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found.'.format(username),'success')
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('You cannot unfollow yourself!')
+        return redirect(url_for('user_posts',username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('You are not following {}.'.format(username),'success')
+    return redirect(url_for('user_posts',username=username))
+

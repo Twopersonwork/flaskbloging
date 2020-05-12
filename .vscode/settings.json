@@ -1,4 +1,6 @@
 {
-    "python.formatting.provider": "yapf",
-    "python.linting.enabled": true
+    ...,
+    "[python]": {
+        "editor.defaultFormatter": "iansan5653.format-python-docstrings"
+    }
 }

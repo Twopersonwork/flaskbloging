@@ -21,9 +21,43 @@ class User(db.Model, UserMixin):
     commented = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='user',lazy='dynamic')
     image = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='img',lazy=True)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    followed = db.relationship('Follow',
+                               foreign_keys='Follow.follower_id',
+                               backref=db.backref('follower', lazy='joined'),
+                               lazy='dynamic',
+                               cascade='all, delete-orphan')
+    followers = db.relationship('Follow',
+                                foreign_keys='Follow.followed_id',
+                                backref=db.backref('followed', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
 
+#----------------------------------------------------------------------------------
+#follow
+    def follow(self, user):
+        if not self.is_following(user):
+            f = Follow(follower=self, followed=user)
+            db.session.add(f)
 
+    def unfollow(self, user):
+        f = self.followed.filter_by(followed_id=user.id).first()
+        if f:
+            db.session.delete(f)
 
+    def is_following(self, user):
+        if user.id is None:
+            return False
+        return self.followed.filter_by(
+            followed_id=user.id).first() is not None
+
+    def is_followed_by(self, user):
+        if user.id is None:
+            return False
+        return self.followers.filter_by(
+            follower_id=user.id).first() is not None
+
+#---------------------------------------------------------------------------
+#like
     def like_post(self, post):
         if not self.has_liked_post(post):
             like = PostLike(user_id=self.id, post_id=post.id)
@@ -60,7 +94,7 @@ class User(db.Model, UserMixin):
             PostUnLike.post_id == post.id).count() > 0
 
     
-
+#------------------------------------------------------------------------------------
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -121,3 +155,20 @@ class PostComment(db.Model):
     
     def __repr__(self):
         return f"Comment('{self.user_id}','{self.post_id}','{self.date_posted}','{self.content}')"    
+
+class Follow(db.Model):
+    __tablename__ = 'follows'    
+    follower_id = db.Column(db.Integer, db.ForeignKey('user.id'),primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('user.id'),primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Follow('{self.follower_id}','{self.followed_id}')"
+
+
+
+
+
+
+
+    

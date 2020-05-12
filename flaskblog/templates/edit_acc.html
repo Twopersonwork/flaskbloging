@@ -69,7 +69,7 @@
             </div>
         </fieldset>
         <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+            {{ form.submit(class="btn btn-outline-info",href="{{ url_for('confirm_email') }}") }}
         </div>
     </form>
 </div>
