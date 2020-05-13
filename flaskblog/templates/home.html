@@ -9,8 +9,19 @@
       <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
       <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
     </div>
+    
     <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
-    <p class="article-content">{{ post.content }}</p>
+    <div class="image_container pb-3 pt-2">
+      <img src="{{url_for('static', filename='post_pics/' + post.image)}}" class="img-fluid img-thumbnail" alt="Responsive image">
+    </div>
+  
+
+   
+    <span class="article-content">
+      <span class=" mt-3">{{post.content| truncate(300) | safe }}.....</span>
+
+      <a href="{{url_for('post',post_id=post.id)}}">Read more</a></span>
+     
     <hr class="allhr">
 
     {% if current_user.has_liked_post(post) %}
@@ -49,6 +60,10 @@
 ...
 {% endif %}
 {% endfor %}
+
+
+
+
 
 
 

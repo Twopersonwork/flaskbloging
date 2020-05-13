@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, redirect, request, abort,current_app
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                              PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm)
@@ -94,6 +94,15 @@ def save_picture(form_picture):
     return picture_fn
 
 
+def save_images(form_photo):
+    hash_photo = secrets.token_hex(10)
+    _, file_extention = os.path.splitext(form_photo.filename)
+    photo_name = hash_photo + file_extention
+    file_path = os.path.join(current_app.root_path,'static/post_pics',photo_name)
+    form_photo.save(file_path)
+    return photo_name
+    
+
 @app.route("/account/edit", methods=['GET', 'POST'])
 @login_required
 def account_edit():
@@ -139,7 +148,8 @@ def account(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        form_photo = save_images(form.photo.data)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user,image=form_photo)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')

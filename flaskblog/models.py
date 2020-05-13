@@ -122,9 +122,11 @@ class Post(db.Model,UserMixin):
     likes = db.relationship('PostLike', backref='post', lazy='dynamic')
     unlikes = db.relationship('PostUnLike', backref='post', lazy='dynamic')
     comments = db.relationship('PostComment',backref='post',lazy='dynamic')
+    image = db.Column(db.String(100), nullable=False,default='default.jpg')
+
 
     def __repr__(self):
-        return f"Post('{self.title}','{self.date_posted}','{self.comments}')"  
+        return f"Post('{self.title}','{self.date_posted}','{self.comments}','{self.image}')"  
 
 class PostLike(db.Model):
     __tablename__ = 'post_like'

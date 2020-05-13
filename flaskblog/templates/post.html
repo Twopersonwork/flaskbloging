@@ -19,7 +19,7 @@
     <h2 class="article-title">{{ post.title }}</h2>
     <p class="article-content">{{ post.content }}</p>
     <hr>
-    <a href="{{url_for('post_comment',post_id=post.id)}}">View Comments</a>
+    <a style="float:right;" href="{{url_for('post_comment',post_id=post.id)}}">View Comments</a>
 
   </div>
 
