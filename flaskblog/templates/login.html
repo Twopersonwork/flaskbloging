@@ -57,126 +57,90 @@
         </nav>
     </header>
 
+    <main role="main" class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </main>
+
 
 
     <div class="container">
         <div class="row">
             <div class=" col-md-2 col-1"></div>
-        <div class="content-section  col-md-8 col-10">
-            <form method="POST" action="">
-                {{ form.hidden_tag() }}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Log In</legend>
-                    <div class="form-group">
-                        {{ form.email.label(class="form-control-label") }}
-                        {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
+            <div class="content-section  col-md-8 col-10">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Log In</legend>
+                        <div class="form-group">
+                            {{ form.email.label(class="form-control-label") }}
+                            {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.email(class="form-control form-control-lg") }}
+                            {% endif %}
                         </div>
-                        {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
-                        {{ form.password.label(class="form-control-label") }}
-                        {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
+                        <div class="form-group">
+                            {{ form.password.label(class="form-control-label") }}
+                            {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.password(class="form-control form-control-lg") }}
+                            {% endif %}
                         </div>
-                        {% else %}
-                        {{ form.password(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
-                    <div class="form-check">
-                        {{ form.remember(class="form-check-input") }}
-                        {{ form.remember.label(class="form-check-label") }}
-                    </div>
-                </fieldset>
-                <div class="form-group">
+                        <div class="form-check">
+                            {{ form.remember(class="form-check-input") }}
+                            {{ form.remember.label(class="form-check-label") }}
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
 
-                    {{ form.submit(class="btn btn-outline-info") }}
+                        {{ form.submit(class="btn btn-outline-info") }}
 
-                    <span class="text-muted ml-2">
-                        <a href="{{ url_for('reset_request') }}">Forgot Password?</a>
-                    </span>
-                </div>
-            </form>
-            <hr>
-            <span>
-                Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
-            </span>
-        </div>
+                        <span class="text-muted ml-2">
+                            <a href="{{ url_for('reset_request') }}">Forgot Password?</a>
+                        </span>
+                    </div>
+                </form>
+                <hr>
+                <span>
+                    Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
+                </span>
+            </div>
         </div>
         <div class=" col-md-2 col-1"></div>
     </div>
- 
 
-
-
-    {% if current_user.is_authenticated %}
-    <div class="col-md-4">
-        <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>Here we go!
-                <ul class="list-group">
-
-                    <a class="list-group-item list-group-item-light" href="{{url_for('home')}}">Dashboard</a>
+    
 
 
 
 
-                    <a class="list-group-item list-group-item-light"
-                        href="{{url_for('user_posts',username='Prachi')}}">Mind
-                        Flowing Posts</a>
-
-                    <li class="list-group-item list-group-item-light">Saved Posts</li>
-                    <li class="list-group-item list-group-item-light">Liked Posts</li>
-                    {% endif %}
-                </ul>
-            </p>
-        </div>
-    </div>
-    </div>
-    </main>
-
-    <footer class="page-footer text-center font-small mt-4 wow fadeIn fixed-bottom"
-        style="background-color:black;opacity: 0.98;">
 
 
-
-        <!-- Social icons -->
-        <div class="pb-4 pt-2">
-            <!-- <img src="static/images/insta.png" class="pr-3" alt=""> -->
-
-
-            <div class="pr-3 pt-4">
-                <img src="/static/images/sending.png" alt=""><span class="pl-2 text-muted"
-                    style="color: white;">mindflowingblog@gmail.com</span>
-            </div>
-
-
-            <!-- <a href="http://codepen.io/mdbootstrap/" style="color: white;" target="_blank">
-          <i class="fa fa-instagram mr-3"></i>
-        </a> -->
-        </div>
-        <!-- Social icons -->
-
-        <!--Copyright-->
-        <div class="pb-2">
-
-            <a href="https://mindflowingblog.herokuapp.com" class="prachi"
-                style=" text-decoration: none;font-size: x-large;font-family: 'Shadows Into Light', cursive;"
-                target="_blank">
-                MIND FLOWING BLOG
-            </a>
-        </div>
-    </footer>
 
 
 

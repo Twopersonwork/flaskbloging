@@ -69,8 +69,9 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    elif request.method == 'POST':
+    elif request.method=='POST':
         flash('Please verify your email.','danger')
+        
     return render_template('login.html', title='Login', form=form)
 
 
