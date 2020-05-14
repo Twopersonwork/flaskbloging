@@ -1,0 +1,68 @@
+body {
+    background: white;
+    color: #333333;
+    margin-top: 5rem;
+    background: url("images/yellow.jpeg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: 0 20px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #444444;
+  }
+  
+  .bg-steel {
+    background-color: #1d809f;
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: #ffffff;
+    font-size: large;
+    /*margin-top: 20px;*/
+  }
+  .p{
+    margin-left: 100px;
+  }
+  
+  hr.allhr {
+    border: 0.5px solid black;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #e4ac00;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+    
+  }
+  
+  #navbarToggal {
+    padding-bottom: 10px;
+  }
+  
+  .content-section  {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 0.5px solid white;
+    border-radius: 5px;
+    box-shadow: 3px 5px 5px 5px #63552b;
+    
+
+
+
+  }
+  
+
+    
+  
+  .prachi {
+    font-size: 72px;
+    background: -webkit-linear-gradient(#3277a8,#e4ac00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+     font-weight: bold;
+  }

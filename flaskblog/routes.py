@@ -20,7 +20,7 @@ def home():
 
 @app.route("/",methods=['GET'])
 def intro():
-    return render_template('intro.html', title='Home')
+    return render_template('lay.html', title='Home')
 
 @app.route("/about")
 def about():
@@ -148,10 +148,15 @@ def account(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        form_photo = save_images(form.photo.data)
-        post = Post(title=form.title.data, content=form.content.data, author=current_user,image=form_photo)
-        db.session.add(post)
-        db.session.commit()
+        if form.photo.data:
+            form_photo = save_images(form.photo.data)
+            post = Post(title=form.title.data, content=form.content.data, author=current_user,image=form_photo)
+            db.session.add(post)
+            db.session.commit()
+        else:
+            post = Post(title=form.title.data, content=form.content.data, author=current_user)
+            db.session.add(post)
+            db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post',

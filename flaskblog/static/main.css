@@ -34,6 +34,7 @@ hr.allhr {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
+  
 }
 
 #navbarToggal {
@@ -108,11 +109,6 @@ a.article-title:hover {
   border: 5px solid white;
 }*/
 
-.img-fluid {
-  max-width: 90%;
-  border: 4px solid black;
-}
-
 
 
 .image_inner_container img {
@@ -147,4 +143,20 @@ a.article-title:hover {
 .btn-grad:hover {
   background-position: right center;
   color: #ffffff;
+}
+
+  
+.boom{
+  height: 100%;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prachi {
+  font-size: 72px;
+  background: -webkit-linear-gradient(#3277a8,#e4ac00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+   font-weight: bold;
 }
