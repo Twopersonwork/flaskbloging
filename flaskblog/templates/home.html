@@ -9,20 +9,36 @@
       <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
       <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
     </div>
-    
-    <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+
+
+
+    <a class="article-title " style="font-size: 35px;" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+    {% if current_user.username!=post.author.username %}
+    {% if current_user.has_saved_post(post)%}
+    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='unsave') }}" style="color:black; "><i
+        class="fas fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
+    {% else %}
+    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='save') }}" style="color: black;"><i
+        class="far fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
+    {% endif %}
+    {% endif %}
+
+
+
+
     {% if post.image %}
     <div class="image_container pb-3 pt-2">
-      <img src="{{url_for('static', filename='post_pics/' + post.image)}}" class="img-fluid img-thumbnail" style="max-width: 90%;" alt="Responsive image">
+      <img src="{{url_for('static', filename='post_pics/' + post.image)}}" class="img-fluid img-thumbnail"
+        style="max-width: 90%;" alt="Responsive image">
     </div>
-  
-{% endif %}
-   
+
+    {% endif %}
+
     <span class="article-content">
       <span class=" mt-3">{{post.content| truncate(300) | safe }}.....</span>
 
       <a href="{{url_for('post',post_id=post.id)}}">Read more</a></span>
-     
+
     <hr class="allhr">
 
     {% if current_user.has_liked_post(post) %}
@@ -40,6 +56,7 @@
     <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}" style="color: black;"><i
         class="fa fa-thumbs-down fa-2x"></i></a><span class="pl-2">{{post.unlikes.count()}}</span>
     {% endif %}
+    
     <span class="pl-2 pt-2" style="float: right;">{{post.comments.count()}}</span>
 
     <a style="float: right;" href="{{ url_for('post_comment', post_id=post.id) }}"><i title="Comments"

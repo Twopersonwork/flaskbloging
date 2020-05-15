@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort,curr
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                              PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm)
-from flaskblog.models import User, Post,PostComment,Follow
+from flaskblog.models import User, Post,PostComment,Follow,PostLike,PostSave
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from flaskblog.token import generate_confirmation_token, confirm_token
@@ -61,9 +61,9 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     user = User.query.filter_by(email=form.email.data).first()
-    if form.validate_on_submit() and user.confirmed:
+    if form.validate_on_submit() :
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and user.confirmed and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
@@ -168,7 +168,9 @@ def new_post():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     form = PostCommentForm()
-    return render_template('post.html', title=post.title, post=post,form=form)
+    image = url_for('static', filename='post_pics/' + post.image)
+
+    return render_template('post.html', title=post.title, post=post,form=form,image=image)
 
 @app.route("/post/<int:post_id>/comment", methods=['GET', 'POST'])
 @login_required
@@ -209,6 +211,9 @@ def update_post(post_id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        if form.photo.data:
+            picture_file = save_images(form.photo.data)
+            post.image = picture_file
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
@@ -217,8 +222,10 @@ def update_post(post_id):
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
+    image = url_for('static', filename='post_pics/' + post.image)
+    
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
+                           form=form, legend='Update Post',image=image,post=post)
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
@@ -249,6 +256,19 @@ def like_action(post_id, action):
         current_user.unlike1_post(post)
         db.session.commit()
     return redirect(request.referrer)
+
+@app.route('/save/<int:post_id>/<action>')
+@login_required
+def save_action(post_id, action):
+    post = Post.query.filter_by(id=post_id).first_or_404()
+    if action == 'save':
+        current_user.save_post(post)
+        db.session.commit()
+    if action == 'unsave':
+        current_user.unsave_post(post)
+        db.session.commit()
+    return redirect(request.referrer)
+    
 
 
 
@@ -383,3 +403,23 @@ def unfollow(username):
     flash('You are not following {}.'.format(username),'success')
     return redirect(url_for('user_posts',username=username))
 
+@app.route('/like/<username>', methods=['GET'])
+@login_required
+def like_post(username):
+    user =User.query.filter_by(username=username).first()
+    if user == current_user:
+        postlike = (db.session.query(PostLike.post_id).filter(PostLike.user_id==user.id))
+        posts = (db.session.query(Post).filter(Post.id.in_(postlike)).all())
+    
+    return render_template('like_post.html', posts=posts,user=user)
+
+
+@app.route('/save/<username>', methods=['GET'])
+@login_required
+def save_post(username):
+    user =User.query.filter_by(username=username).first()
+    if user == current_user:
+        postsave = (db.session.query(PostSave.post_id).filter(PostSave.user_id==user.id))
+        posts = (db.session.query(Post).filter(Post.id.in_(postsave)).all())
+    
+    return render_template('save_post.html', posts=posts,user=user)

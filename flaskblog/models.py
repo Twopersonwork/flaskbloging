@@ -17,6 +17,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     liked = db.relationship('PostLike',foreign_keys='PostLike.user_id', backref='user', lazy='dynamic')
+    saved = db.relationship('PostSave',foreign_keys='PostSave.user_id', backref='user', lazy='dynamic')
+
     unliked = db.relationship('PostUnLike',foreign_keys='PostUnLike.user_id', backref='user', lazy='dynamic')
     commented = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='user',lazy='dynamic')
     image = db.relationship('PostComment',foreign_keys='PostComment.user_id',backref='img',lazy=True)
@@ -93,6 +95,25 @@ class User(db.Model, UserMixin):
             PostUnLike.user_id == self.id,
             PostUnLike.post_id == post.id).count() > 0
 
+#---------------------------------------------------------------------------------------------
+#save
+    def save_post(self, post):
+        if not self.has_saved_post(post):
+            save = PostSave(user_id=self.id, post_id=post.id)
+            db.session.add(save)
+
+    def has_saved_post(self, post):
+        return PostSave.query.filter(
+            PostSave.user_id == self.id,
+            PostSave.post_id == post.id).count() > 0
+
+
+    def unsave_post(self, post):
+        if self.has_saved_post(post):
+            PostSave.query.filter_by(
+                user_id=self.id,
+                post_id=post.id).delete()
+
     
 #------------------------------------------------------------------------------------
 
@@ -122,7 +143,9 @@ class Post(db.Model,UserMixin):
     likes = db.relationship('PostLike', backref='post', lazy='dynamic')
     unlikes = db.relationship('PostUnLike', backref='post', lazy='dynamic')
     comments = db.relationship('PostComment',backref='post',lazy='dynamic')
-    image = db.Column(db.String(100), nullable=False)
+    saves = db.relationship('PostSave', backref='post', lazy='dynamic')
+
+    image = db.Column(db.String(100))
 
 
     def __repr__(self):
@@ -169,7 +192,14 @@ class Follow(db.Model):
 
 
 
+class PostSave(db.Model):
+    __tablename__ = 'post_save'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
+    def __repr__(self):
+        return f"Save('{self.user_id}','{self.post_id}')"  
 
 
 

@@ -13,6 +13,7 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
   <!-- fontawsome Link -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
   {% if title %}
@@ -83,11 +84,14 @@
 
 
 
-              <a class="list-group-item list-group-item-light" href="{{url_for('user_posts',username='Prachi')}}">Mind
+              <a class="list-group-item list-group-item-light"
+                href="{{url_for('user_posts',username='mind flowing blog')}}">Mind
                 Flowing Posts</a>
 
-              <li class="list-group-item list-group-item-light">Saved Posts</li>
-              <li class="list-group-item list-group-item-light">Liked Posts</li>
+              <a class="list-group-item list-group-item-light"
+                href="{{url_for('save_post',username=current_user.username)}}">Saved Posts</a>
+              <a class="list-group-item list-group-item-light"
+                href="{{url_for('like_post',username=current_user.username)}}">Liked Posts</a>
               {% endif %}
             </ul>
           </p>
@@ -96,7 +100,7 @@
     </div>
   </main>
 
-  
+
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -112,6 +116,7 @@
   <script src="{{ url_for('static',filename='read.js') }}"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
     integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/2f3b662a80.js" crossorigin="anonymous"></script>
 
 
 

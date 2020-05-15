@@ -17,6 +17,13 @@
 
     </div>
     <h2 class="article-title">{{ post.title }}</h2>
+    {% if post.image %}
+    <div class="image_container pb-3 pt-2">
+      <img src="{{url_for('static', filename='post_pics/' + post.image)}}" class="img-fluid img-thumbnail"
+        style="max-width: 90%;" alt="Responsive image">
+    </div>
+
+    {% endif %}
     <p class="article-content">{{ post.content }}</p>
     <hr>
     <a style="float:right;" href="{{url_for('post_comment',post_id=post.id)}}">View Comments</a>
