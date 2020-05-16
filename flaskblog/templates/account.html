@@ -6,7 +6,8 @@
             <div class="panel panel-default">
                 <!-- <div class="userpic"> -->
                 <div class="image_inner_container">
-                    <img class="rounded-circle account-img img-fluid" style="text-align: center;" src="{{ image_file }}">
+                    <img class="rounded-circle account-img img-fluid" style="text-align: center;"
+                        src="{{ image_file }}">
                 </div>
                 <div class="media-body">
                     <h2 class="account-heading">{{ current_user.username }}</h2>
@@ -19,30 +20,32 @@
 
                 <!-- Followers following Posts -->
                 <!-- <div class="container main-section"> -->
-                    <div class="row">
-                        <div class="col-4 ">
+                <div class="row">
+                    <div class="col-4 ">
 
-                            <div>
-                                <h5>Following</h5>
-                                <span style="text-align: center;">{{user.followed.count()}}</span>
-                            </div>
-                        </div>
-                        <div class="col-4">
-
-                            <div>
-                                <h5>Followers</h5>
-
-                                <span style="text-align: center;"> {{user.followers.count()}}</span>
-                            </div>
-                        </div>
-                        <div class="col-4" >
-
-                            <div>
-                                <h5>Posts</h5>
-                                <span style="text-align: center;"> {{ posts.count() }}</span>
-                            </div>
+                        <div>
+                            <h5>Following</h5>
+                            <span style="text-align: center;">{{user.followed.count()}}</span>
                         </div>
                     </div>
+                    <div class="col-4">
+
+                        <div>
+                            
+                                <h5>Followers</h5>
+                            
+
+                            <span style="text-align: center;"> {{user.followers.count()}}</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+
+                        <div>
+                            <h5>Posts</h5>
+                            <span style="text-align: center;"> {{ posts.count() }}</span>
+                        </div>
+                    </div>
+                </div>
                 <!-- </div> -->
                 <!-- jrbvkjsvjnjkfnvgj -->
 

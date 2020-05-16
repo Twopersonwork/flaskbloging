@@ -41,22 +41,14 @@
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if current_user.is_authenticated %}
-            <form class="form-inline d-flex justify-content-center md-form form-sm">
-              <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-                aria-label="Search">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </form>
+
             <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
             <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Post</a>
             <a class="nav-item nav-link" href="{{ url_for('account',username=current_user.username) }}">Account</a>
-            <a class="nav-item nav-link" href="{{ url_for('logout') }}"><img title="Logout"
+            <a class="nav-item nav-link" href="{{ url_for('logout') }}"><img  data-toggle="tooltip" data-placement="right" title="Log Out"
                 src="/static/images/logout.png"></a>
             {% else %}
-            <form class="form-inline d-flex justify-content-center md-form form-sm">
-              <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-                aria-label="Search">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </form>
+
             <a class="nav-item nav-link" href="{{ url_for('intro') }}">Home</a>
             <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
             <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
@@ -71,6 +63,9 @@
 
 
   <main role="main" class="container">
+
+
+
     <div class="row">
       <div class="col-md-8">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -91,18 +86,15 @@
           <p class='text-muted'>Here we go!
             <ul class="list-group">
 
-              <a class="list-group-item list-group-item-light" href="{{url_for('home')}}">Dashboard</a>
+              <a class="list-group-item list-group-item-light" href="{{url_for('home')}}" data-toggle="tooltip" data-placement="top" title="Dashboard">Dashboard</a>
 
-
-
-
-              <a class="list-group-item list-group-item-light"
+              <a class="list-group-item list-group-item-light" data-toggle="tooltip" data-placement="top" title="Mind"
                 href="{{url_for('user_posts',username='mind flowing blog')}}">Mind
                 Flowing Posts</a>
 
-              <a class="list-group-item list-group-item-light"
+              <a class="list-group-item list-group-item-light" data-toggle="tooltip" data-placement="left" title="Saved Posts"
                 href="{{url_for('save_post',username=current_user.username)}}">Saved Posts</a>
-              <a class="list-group-item list-group-item-light"
+              <a class="list-group-item list-group-item-light" data-toggle="tooltip" data-placement="left" title="Likde Posts"
                 href="{{url_for('like_post',username=current_user.username)}}">Liked Posts</a>
               {% endif %}
             </ul>
@@ -129,7 +121,12 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
     integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/2f3b662a80.js" crossorigin="anonymous"></script>
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
 
+  </script>
 
 
 </body>

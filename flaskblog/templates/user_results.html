@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Search results for "{{ query }}":</h1>
+{% for user in results %}
+<article class="media content-section">
+  <img class="rounded-circle article-img img-fluid"
+    src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+      <a class="mr-2 pt-3 article-title " style="font-size: 25px;" href="{{ url_for('user_posts', username=user.username) }}">{{ user.username }}</a>
+
+
+</article>
+{% endfor %}
+
+{% endblock content%}

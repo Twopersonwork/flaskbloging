@@ -7,14 +7,24 @@
             <div class="panel panel-default">
                 <!-- <div class="userpic"> -->
                 <div class="image_inner_container">
+                    {% if post.author %}
                     <img class="rounded-circle account-img img-fluid" style="text-align: center;"
                         src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+                    {% else %}
+                    <img class="rounded-circle account-img img-fluid" style="text-align: center;"
+                        src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+
+
+                    {% endif %}
                 </div>
                 <div class="media-body">
-
+                    {% if post.author %}
 
                     <h2 class="account-heading">{{ post.author.username }}</h2>
+                    {% else %}
 
+                    <h2 class="account-heading">{{ user.username }}</h2>
+                    {% endif %}
                     <!-- <p class="text-secondary">{{ current_user.email }}</p> -->
                 </div>
                 <hr>
@@ -37,7 +47,9 @@
                     <div class="col-4 ">
 
                         <div class="box-layout-text">
+
                             <h5>Followers</h5>
+
 
                             <span style="text-align: center;"> {{user.followers.count()}}</span>
                         </div>
@@ -77,7 +89,7 @@
     </div>
 </div>
 
-
+{% if post.author %}
 
 
 {% for post in posts.items %}
@@ -110,6 +122,7 @@
     </div>
 </article>
 {% endfor %}
+{% endif %}
 {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
 {% if page_num %}
 {% if posts.page == page_num %}

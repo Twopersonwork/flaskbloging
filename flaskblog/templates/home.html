@@ -1,5 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
+
+<form style="display: inline;" action="{{ url_for('search') }}" method="post" name="search">
+<div class="input-group md-form form-sm form-2 pl-0">
+
+
+  {{ form.hidden_tag() }}
+  <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search.." name="search">
+  
+    <button class="btn btn-info"  type="submit"><i class="fas fa-search text-grey"
+      aria-hidden="true"></i></button>
+  
+</div>
+</form>
+
+
 {% for post in posts.items %}
 <article class="media content-section">
   <img class="rounded-circle article-img img-fluid"
@@ -12,14 +27,15 @@
 
 
 
-    <a class="article-title " style="font-size: 35px;" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+    <a class="article-title " style="font-size: 35px;"
+      href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
     {% if current_user.username!=post.author.username %}
     {% if current_user.has_saved_post(post)%}
-    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='unsave') }}" style="color:black; "><i
-        class="fas fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
+    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='unsave') }}"
+      style="color:black; "><i  data-toggle="tooltip" data-placement="top" title="Save Post" class="fas fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
     {% else %}
-    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='save') }}" style="color: black;"><i
-        class="far fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
+    <a class="col-md-9 col-4 col-sm-6" href="{{ url_for('save_action', post_id=post.id, action='save') }}"
+      style="color: black;"><i  data-toggle="tooltip" data-placement="top" title="Save Post" class="far fa-bookmark fa-2x pt-2" style="float:right;"></i></a>
     {% endif %}
     {% endif %}
 
@@ -34,11 +50,12 @@
 
     {% endif %}
 
-    <span class="article-content">
-      <span class=" mt-3">{{post.content| truncate(300) | safe }}.....</span>
+    <div>
+      <span class="article-content">
+        <span class=" mt-3">{{post.content| truncate(300) | safe }}.....</span>
 
-      <a href="{{url_for('post',post_id=post.id)}}">Read more</a></span>
-
+        <a href="{{url_for('post',post_id=post.id)}}">Read more</a></span>
+    </div>
     <hr class="allhr">
 
     {% if current_user.has_liked_post(post) %}
@@ -56,10 +73,10 @@
     <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}" style="color: black;"><i
         class="fa fa-thumbs-down fa-2x"></i></a><span class="pl-2">{{post.unlikes.count()}}</span>
     {% endif %}
-    
+
     <span class="pl-2 pt-2" style="float: right;">{{post.comments.count()}}</span>
 
-    <a style="float: right;" href="{{ url_for('post_comment', post_id=post.id) }}"><i title="Comments"
+    <a style="float: right;" href="{{ url_for('post_comment', post_id=post.id) }}"><i  data-toggle="tooltip" data-placement="top" title="Comments"
         class="fa fa-comments fa-2x" onmouseover="this.style.color='#1d809f'" onmouseout="this.style.color='black'"
         style="color: black;"></i></a>
 

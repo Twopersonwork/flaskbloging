@@ -4,19 +4,26 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort,current_app
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
-                             PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm)
+                             PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm,SearchForm)
 from flaskblog.models import User, Post,PostComment,Follow,PostLike,PostSave
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from flaskblog.token import generate_confirmation_token, confirm_token
+from flaskblog import MAX_SEARCH_RESULTS
+import flask_whooshalchemy as whooshalchemy
+
+whooshalchemy.whoosh_index(app, Post)
+whooshalchemy.whoosh_index(app,User)
+
 
 
 @app.route("/home")
 @login_required
 def home():
+    form=SearchForm()
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('home.html', posts=posts)
+    return render_template('home.html', posts=posts,form=form)
 
 @app.route("/",methods=['GET'])
 def intro():
@@ -168,9 +175,8 @@ def new_post():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     form = PostCommentForm()
-    image = url_for('static', filename='post_pics/' + post.image)
 
-    return render_template('post.html', title=post.title, post=post,form=form,image=image)
+    return render_template('post.html', title=post.title, post=post,form=form)
 
 @app.route("/post/<int:post_id>/comment", methods=['GET', 'POST'])
 @login_required
@@ -222,10 +228,9 @@ def update_post(post_id):
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
-    image = url_for('static', filename='post_pics/' + post.image)
     
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post',image=image,post=post)
+                           form=form, legend='Update Post',post=post)
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
@@ -423,3 +428,27 @@ def save_post(username):
         posts = (db.session.query(Post).filter(Post.id.in_(postsave)).all())
     
     return render_template('save_post.html', posts=posts,user=user)
+
+
+@app.route('/search', methods=['POST'])
+@login_required
+def search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(url_for('search_results', query=form.search.data))
+
+
+@app.route('/search_results/<query>')
+@login_required
+def search_results(query):
+    if query==['title']:
+
+        results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
+        return render_template('search_results.html',query=query,results=results)
+    else:
+
+        results = User.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
+        return render_template('user_results.html',
+                           query=query,
+                           results=results)
+

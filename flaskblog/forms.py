@@ -84,3 +84,6 @@ class PostCommentForm(FlaskForm):
     content = TextAreaField( validators=[DataRequired()])
     submit = SubmitField('Post')
 
+
+class SearchForm(FlaskForm):
+    search = StringField('search', validators=[DataRequired()])

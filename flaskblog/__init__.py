@@ -6,9 +6,10 @@ from flask_login import LoginManager
 from flask_mail import Mail
 
 
-
+MAX_SEARCH_RESULTS = 50
 app = Flask(__name__)
 app.config['SECRET_KEY'] =os.urandom(16)
+app.config['WHOOSH_BASE']='whoosh'
 app.config['SECURITY_PASSWORD_SALT']= 'my_precious_two'
 app.config['SQLALCHEMY_DATABASE_URI']='postgres://rmckyjrelemmlh:3138e8523cd6c897ea38f12ee5617afb4b2174234a602cc8c343062ecd0ff57a@ec2-52-7-39-178.compute-1.amazonaws.com:5432/d7gocrfuhfvthk'
 #app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
