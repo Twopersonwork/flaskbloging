@@ -13,7 +13,6 @@ from flaskblog import MAX_SEARCH_RESULTS
 import flask_whooshalchemy as whooshalchemy
 
 whooshalchemy.whoosh_index(app, Post)
-whooshalchemy.whoosh_index(app,User)
 
 
 
@@ -441,9 +440,5 @@ def search():
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
-    if query==['username']:
-        results = User.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
-        return render_template('user_results.html',query=query,results=results)
-    elif query==['title']:
         results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
         return render_template('search_results.html',query=query,results=results)
