@@ -35,4 +35,4 @@ Werkzeug==1.0.1
 Whoosh==2.7.4
 WTForms==2.3.1
 yapf==0.30.0
-
+git+git://github.com/miguelgrinberg/flask-whooshalchemy.git#egg = flaskblog
