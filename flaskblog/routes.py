@@ -441,14 +441,14 @@ def search():
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
-    if query==['title']:
+    if query==['username']:
 
-        results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
-        return render_template('search_results.html',query=query,results=results)
-    else:
-
-        results = User.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
+        
+         results = User.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
         return render_template('user_results.html',
                            query=query,
                            results=results)
+    else:
 
+        results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
+        return render_template('search_results.html',query=query,results=results)
