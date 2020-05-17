@@ -444,6 +444,6 @@ def search_results(query):
     if query==['username']:
         results = User.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
         return render_template('user_results.html',query=query,results=results)
-    else:
+    elif query==['title']:
         results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
         return render_template('search_results.html',query=query,results=results)
