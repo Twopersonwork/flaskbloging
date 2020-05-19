@@ -90,4 +90,4 @@ class PostCommentForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    search = StringField('search', validators=[DataRequired()])
+    search = StringField('search')

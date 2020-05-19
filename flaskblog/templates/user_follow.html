@@ -3,9 +3,10 @@
 
 
 {% if users %}
+<div class="content-section">
 {% for user in users %}
+<div class="media">
 
-<article class="media content-section">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
 
     <div class="media-body">
@@ -14,6 +15,7 @@
             
       <div class="pt-2">
         <h6 style="float:left;">Followers {{user.followers.count()}}</h6></div> 
+        <hr class="allhr mt-5">
     </div>
     {% if user!=current_user %}
         {% if not current_user.is_following(user) %}
@@ -25,15 +27,16 @@
         {% endif %}
         {% endif %}
     
+</div>
 
-</article>
 
 
 {% endfor %}
+</div>
+
 {% else %}
 <h3 style="text-align: center;">Nothing to Show</h3>
 
 {% endif %}
-
 
 {% endblock content %}

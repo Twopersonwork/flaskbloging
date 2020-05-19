@@ -15,6 +15,13 @@
     <a class="article-title " style="font-size: 35px;"
       href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
 
+      <div>
+        <span class="article-content">
+          <span class=" mt-3">{{post.content| truncate(300) | safe }}.....</span>
+  
+          <a href="{{url_for('post',post_id=post.id)}}">Read more</a></span>
+      </div>
+
   </div>
 </article>
 {% endfor %}

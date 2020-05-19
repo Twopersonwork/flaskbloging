@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 
+
 <form style="display: inline;" action="{{ url_for('search') }}" method="post" name="search">
 <div class="input-group md-form form-sm form-2 pl-0">
 
 
   {{ form.hidden_tag() }}
-  <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search.." name="search">
+  <input class="form-control my-0 py-1 amber-border" type="text" placeholder="Search.." name="search" required>
   
     <button class="btn btn-info"  type="submit"><i class="fas fa-search text-grey"
       aria-hidden="true"></i></button>
