@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort,curr
 from flaskblog import app, db, bcrypt, mail 
 from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                              PostForm, RequestResetForm, ResetPasswordForm, PostCommentForm,SearchForm)
-from flaskblog.models import User, Post,PostComment,Follow,PostLike,PostSave
+from flaskblog.models import User, Post,PostComment,Follow,PostLike,PostSave,PostUnLike
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from flaskblog.token import generate_confirmation_token, confirm_token
@@ -19,7 +19,10 @@ whooshalchemy.whoosh_index(app, Post)
 @app.route("/home")
 @login_required
 def home():
+    
     form=SearchForm()
+    
+
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('home.html', posts=posts,form=form)
@@ -39,6 +42,7 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
+
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password,confirmed=False)
         db.session.add(user)
@@ -48,17 +52,10 @@ def register():
         html = render_template('user/activate.html', confirm_url=confirm_url)
         subject = "Please confirm your email"
         send_email(user.email, subject, html)
-
-        flash('A confirmation email has been sent via email.', 'success')
-
         
+        flash('A confirmation email has been sent via email.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
-
-
-
-
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -341,11 +338,11 @@ def confirm_email(token):
         flash('The confirmation link is invalid or has expired.', 'danger')
     user = User.query.filter_by(email=email).first_or_404()
     if user.confirmed:
-        flash('Account already confirmed. Please login.', 'success')
+        flash('Account already confirmed. Please login.', 'success') 
     else:
         user.confirmed = True
         db.session.add(user)
-        db.session.commit()
+        db.session.commit()       
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('login'))
 
@@ -442,3 +439,50 @@ def search():
 def search_results(query):
         results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
         return render_template('search_results.html',query=query,results=results)
+
+
+
+@app.route('/follower/<username>', methods=['GET'])
+@login_required
+def follower(username):
+    user =User.query.filter_by(username=username).first()
+    
+    userfollow = (db.session.query(Follow.follower_id).filter(Follow.followed_id==user.id))
+    users = (db.session.query(User).filter(User.id.in_(userfollow)).all())
+    
+    return render_template('user_follow.html', users=users,user=user)
+
+@app.route('/following/<username>', methods=['GET'])
+@login_required
+def following(username):
+    user =User.query.filter_by(username=username).first()
+    
+    userfollow = (db.session.query(Follow.followed_id).filter(Follow.follower_id==user.id))
+    users = (db.session.query(User).filter(User.id.in_(userfollow)).all())
+    
+    return render_template('user_follow.html', users=users,user=user)
+
+@app.route('/like1/<username>/<post_id>', methods=['GET'])
+@login_required
+def user_like(username,post_id):
+    user =User.query.filter_by(username=username).first()
+    
+    post = Post.query.get(post_id)
+    
+    userlike = (db.session.query(PostLike.user_id).filter(PostLike.post_id==post.id))
+    users = (db.session.query(User).filter(User.id.in_(userlike)).all())
+    
+    return render_template('user_follow.html', users=users,user=user)
+
+@app.route('/unlike1/<username>/<post_id>', methods=['GET'])
+@login_required
+def user_unlike(username,post_id):
+    user =User.query.filter_by(username=username).first()
+    
+    post = Post.query.get(post_id)
+    
+    userunlike = (db.session.query(PostUnLike.user_id).filter(PostUnLike.post_id==post.id))
+    users = (db.session.query(User).filter(User.id.in_(userunlike)).all())
+    
+    return render_template('user_follow.html', users=users,user=user)
+

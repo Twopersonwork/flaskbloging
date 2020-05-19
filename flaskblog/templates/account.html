@@ -24,7 +24,7 @@
                     <div class="col-4 ">
 
                         <div>
-                            <h5>Following</h5>
+                            <a href="{{url_for('following',username=user.username)}}" ><h5>Following</h5></a>
                             <span style="text-align: center;">{{user.followed.count()}}</span>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
 
                         <div>
                             
-                                <h5>Followers</h5>
+                             <a href="{{url_for('follower',username=user.username)}}" ><h5>Followers</h5></a>
                             
 
                             <span style="text-align: center;"> {{user.followers.count()}}</span>

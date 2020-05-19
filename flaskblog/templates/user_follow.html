@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+{% if users %}
+{% for user in users %}
+
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+
+    <div class="media-body">
+        <a class="mr-2" style="font-size:20px;color: black; text-decoration: none;"
+            href="{{url_for('user_posts',username=user.username)}}">{{ user.username }}</a>
+            
+      <div class="pt-2">
+        <h6 style="float:left;">Followers {{user.followers.count()}}</h6></div> 
+    </div>
+    {% if user!=current_user %}
+        {% if not current_user.is_following(user) %}
+        <a href="{{ url_for('follow', username=user.username) }}" style="margin-top: 20px;float: right;;"
+            class="btn btn-primary mb-2">Follow</a>
+        {% else %}
+        <a href="{{ url_for('unfollow', username=user.username) }}" style="margin-top: 20px;float: right"
+            class="btn btn-danger mb-2">Unfollow</a>
+        {% endif %}
+        {% endif %}
+    
+
+</article>
+
+
+{% endfor %}
+{% else %}
+<h3 style="text-align: center;">Nothing to Show</h3>
+
+{% endif %}
+
+
+{% endblock content %}
